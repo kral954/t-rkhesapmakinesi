@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atatürk'lü Hesap Makinesi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .calculator-btn {
+            transition: all 0.3s ease;
+            transform: scale(1);
+        }
+        .calculator-btn:active {
+            transform: scale(0.95);
+        }
+        .history-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .header-image {
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0));
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 60%, rgba(0,0,0,0));
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col items-center font-sans">
+    <!-- Atatürk Başlık -->
+    <div class="w-full max-w-4xl relative mb-8">
+        <div class="header-image overflow-hidden rounded-b-xl shadow-xl">
+            <img src="https://i.pinimg.com/originals/30/23/73/302373b9d9b1109f0e4e4b3f5c71fb1e.jpg" 
+                 alt="Atatürk" 
+                 class="w-full h-48 object-cover object-center">
+        </div>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-white bg-opacity-70 bg-gray-900 px-6 py-3 rounded-full shadow-lg">
+                <span class="text-red-500">Türk</span> <span class="text-blue-400">Hesap</span> <span class="text-white">Makinesi</span>
+            </h1>
+        </div>
+        <div class="absolute bottom-4 left-0 right-0 text-center">
+            <p class="text-xs text-white bg-black bg-opacity-50 inline-block px-2 py-1 rounded">
+                "Hayatta en hakiki mürşit ilimdir." - Mustafa Kemal Atatürk
+            </p>
+        </div>
+    </div>
+
+    <!-- Ana Hesap Makinesi -->
+    <div class="flex flex-col md:flex-row w-full max-w-4xl px-4 gap-8">
+        <!-- Hesap Makinesi -->
+        <div class="bg-gray-800 rounded-xl shadow-2xl overflow-hidden flex-1">
+            <div class="p-6">
+                <!-- Ekran -->
+                <div class="bg-gray-900 rounded-lg p-4 mb-6 h-24 flex flex-col justify-between">
+                    <div id="history" class="text-gray-400 text-sm h-6 overflow-x-auto whitespace-nowrap"></div>
+                    <div id="display" class="text-right text-3xl font-semibold overflow-x-auto">0</div>
+                </div>
+
+                <!-- Tuşlar -->
+                <div class="grid grid-cols-4 gap-3">
+                    <button onclick="clearAll()" class="calculator-btn bg-red-600 hover:bg-red-700 col-span-2 text-white p-4 rounded-lg font-bold">
+                        AC
+                    </button>
+                    <button onclick="backspace()" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        ←
+                    </button>
+                    <button onclick="appendOperator('/')" class="calculator-btn bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-lg">
+                        ÷
+                    </button>
+
+                    <button onclick="appendNumber('7')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        7
+                    </button>
+                    <button onclick="appendNumber('8')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        8
+                    </button>
+                    <button onclick="appendNumber('9')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        9
+                    </button>
+                    <button onclick="appendOperator('*')" class="calculator-btn bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-lg">
+                        ×
+                    </button>
+
+                    <button onclick="appendNumber('4')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        4
+                    </button>
+                    <button onclick="appendNumber('5')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        5
+                    </button>
+                    <button onclick="appendNumber('6')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        6
+                    </button>
+                    <button onclick="appendOperator('-')" class="calculator-btn bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-lg">
+                        -
+                    </button>
+
+                    <button onclick="appendNumber('1')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        1
+                    </button>
+                    <button onclick="appendNumber('2')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        2
+                    </button>
+                    <button onclick="appendNumber('3')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        3
+                    </button>
+                    <button onclick="appendOperator('+')" class="calculator-btn bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-lg">
+                        +
+                    </button>
+
+                    <button onclick="appendNumber('0')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg col-span-2">
+                        0
+                    </button>
+                    <button onclick="appendNumber('.')" class="calculator-btn bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg">
+                        .
+                    </button>
+                    <button onclick="calculate()" class="calculator-btn bg-green-600 hover:bg-green-700 text-white p-4 rounded-lg">
+                        =
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hesap Geçmişi ve Özellikler -->
+        <div class="bg-gray-800 rounded-xl shadow-2xl overflow-hidden w-full md:w-64">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                <h3 class="font-semibold text-lg">Hesap Geçmişi</h3>
+                <button onclick="clearHistory()" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+            <div id="history-list" class="p-2 max-h-96 overflow-y-auto">
+                <!-- Geçmiş işlemler buraya eklenecek -->
+            </div>
+            
+            <div class="p-4 border-t border-gray-700">
+                <div class="flex items-center space-x-2 mb-2">
+                    <i class="fas fa-info-circle text-blue-400"></i>
+                    <span class="text-sm">Hesap makinesi kısayolları:</span>
+                </div>
+                <ul class="text-xs text-gray-300 space-y-1">
+                    <li><kbd class="bg-gray-700 px-1 py-0.5 rounded">Enter</kbd> = Sonuç</li>
+                    <li><kbd class="bg-gray-700 px-1 py-0.5 rounded">Esc</kbd> = Temizle</li>
+                    <li><kbd class="bg-gray-700 px-1 py-0.5 rounded">Del</kbd> = Sil</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-8 mb-4 text-center text-gray-500 text-sm">
+        <p>Bu hesap makinesi, Atatürk'ün "İlim ve fen nerede ise oradan alacağız" vecizesiyle hazırlanmıştır.</p>
+        <p class="mt-1">© 2023 Türk Hesap Makinesi</p>
+    </footer>
+
+    <script>
+        let currentInput = '0';
+        let previousInput = '';
+        let operation = null;
+        let calculationHistory = [];
+        
+        // DOM Elements
+        const display = document.getElementById('display');
+        const historyDisplay = document.getElementById('history');
+        const historyList = document.getElementById('history-list');
+        
+        // Update Display
+        function updateDisplay() {
+            display.textContent = currentInput;
+            historyDisplay.textContent = previousInput + (operation ? ' ' + operation : '');
+        }
+        
+        // Append Number
+        function appendNumber(number) {
+            if (currentInput === '0' && number !== '.') {
+                currentInput = number;
+            } else if (number === '.' && currentInput.includes('.')) {
+                return; // Prevent multiple decimals
+            } else {
+                currentInput += number;
+            }
+            updateDisplay();
+        }
+        
+        // Append Operator
+        function appendOperator(op) {
+            if (currentInput === '0' && previousInput === '') return;
+            
+            if (operation !== null) {
+                calculate();
+            }
+            
+            operation = op;
+            previousInput = currentInput;
+            currentInput = '0';
+            updateDisplay();
+        }
+        
+        // Calculate
+        function calculate() {
+            let result;
+            const prev = parseFloat(previousInput);
+            const current = parseFloat(currentInput);
+            
+            if (isNaN(prev) || isNaN(current)) return;
+            
+            switch (operation) {
+                case '+':
+                    result = prev + current;
+                    break;
+                case '-':
+                    result = prev - current;
+                    break;
+                case '*':
+                    result = prev * current;
+                    break;
+                case '/':
+                    result = prev / current;
+                    break;
+                default:
+                    return;
+            }
+            
+            // Add to history
+            const historyItem = `${previousInput} ${operation} ${currentInput} = ${result}`;
+            calculationHistory.push(historyItem);
+            updateHistory();
+            
+            currentInput = result.toString();
+            operation = null;
+            previousInput = '';
+            updateDisplay();
+        }
+        
+        // Clear All
+        function clearAll() {
+            currentInput = '0';
+            previousInput = '';
+            operation = null;
+            updateDisplay();
+        }
+        
+        // Backspace
+        function backspace() {
+            if (currentInput.length === 1) {
+                currentInput = '0';
+            } else {
+                currentInput = currentInput.slice(0, -1);
+            }
+            updateDisplay();
+        }
+        
+        // Update History
+        function updateHistory() {
+            historyList.innerHTML = '';
+            const recentHistory = calculationHistory.slice().reverse();
+            
+            if (recentHistory.length === 0) {
+                const emptyMsg = document.createElement('div');
+                emptyMsg.className = 'text-center text-gray-500 py-4 text-sm';
+                emptyMsg.textContent = 'Henüz işlem yapılmadı';
+                historyList.appendChild(emptyMsg);
+                return;
+            }
+            
+            recentHistory.forEach(item => {
+                const historyElement = document.createElement('div');
+                historyElement.className = 'history-item px-3 py-2 text-sm cursor-pointer rounded';
+                historyElement.textContent = item;
+                historyElement.onclick = () => {
+                    const parts = item.split(' = ');
+                    if (parts.length === 2) {
+                        currentInput = parts[1];
+                        const expressionParts = parts[0].split(' ');
+                        if (expressionParts.length === 3) {
+                            previousInput = expressionParts[0];
+                            operation = expressionParts[1];
+                        }
+                        updateDisplay();
+                    }
+                };
+                historyList.appendChild(historyElement);
+            });
+        }
+        
+        // Clear History
+        function clearHistory() {
+            calculationHistory = [];
+            updateHistory();
+        }
+        
+        // Keyboard Support
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '0' && e.key <= '9') appendNumber(e.key);
+            else if (e.key === '.') appendNumber('.');
+            else if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/') appendOperator(e.key);
+            else if (e.key === 'Enter' || e.key === '=') calculate();
+            else if (e.key === 'Escape') clearAll();
+            else if (e.key === 'Backspace') backspace();
+            else if (e.key === 'Delete') backspace();
+        });
+        
+        // Initialize
+        updateDisplay();
+        updateHistory();
+    </script>
+</body>
+</html>
